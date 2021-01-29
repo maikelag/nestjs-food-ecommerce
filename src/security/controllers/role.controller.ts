@@ -11,12 +11,12 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { RoleService } from '../services';
-import { RoleDTO } from '../dtos/role.dto';
+import { RoleCreateDto, RoleUpdateDto } from '../dtos';
 import { PermissionList } from '../../common/permissions.enum';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { PermissionsDecorator } from '../../common/decorators/permission.decorator';
 import { ValidationPipe } from '../../common/validation.pipe';
-import { RoleEntity } from '../entities';
+import { PermissionEntity, RoleEntity } from '../entities';
 
 @Controller('roles')
 export class RoleController {
@@ -29,7 +29,7 @@ export class RoleController {
 
   @UsePipes(new ValidationPipe())
   @Post()
-  createRole(@Body() role: RoleDTO): Promise<RoleEntity> {
+  createRole(@Body() role: RoleCreateDto): Promise<RoleEntity> {
     return this.roleService.createRole(role);
   }
 
@@ -42,5 +42,20 @@ export class RoleController {
   @Get('/:id')
   findOneRole(@Param('id') roleId: string) {
     return this.roleService.findOneRole(roleId);
+  }
+
+  @Put('/:id')
+  updateRole(@Param('id') roleId: string, @Body() roleData: RoleUpdateDto) {
+    return this.roleService.updateRole(roleId, roleData);
+  }
+
+  @Put('/:id/role')
+  changeNameRole(@Param('id') roleId: string, @Body('role') role: string) {
+    return this.roleService.changeNameRole(roleId, role);
+  }
+
+  @Put('/:id/permissions')
+  changePermissionsRole(@Param('id') roleId: string, @Body('permissions') permissions: Array<PermissionEntity>) {
+    return this.roleService.changePermissionsRole(roleId, permissions);
   }
 }

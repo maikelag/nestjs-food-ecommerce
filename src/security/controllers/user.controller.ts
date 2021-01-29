@@ -9,13 +9,12 @@ import {
   Put,
   UsePipes, UseGuards, ParseIntPipe,
 } from '@nestjs/common';
-import { User } from '../interfaces/user.interface';
 import { UserEntity} from '../entities'
 import { UserService } from '../services';
-import { UserDTO, UserAuthDTO } from '../dtos/user.dto';
 import { UserDecorator } from '../../common/decorators/user.decorator';
 import { ValidationPipe } from '../../common/validation.pipe';
 import { RoleEntity } from '../entities/role.entity';
+import { UserAuthDTO, UserChangePasswordDTO, UserCreateDto } from '../dtos';
 
 @Controller('users')
 export class UserController {
@@ -28,12 +27,13 @@ export class UserController {
 
   @UsePipes(new ValidationPipe())
   @Post()
-  createUser(@Body() userData: UserDTO) {
+  createUser(@Body() userData: UserCreateDto) {
     return this.usersService.createUser(userData);
   }
 
   @Get('/who-i-am')
   whoIAm(@UserDecorator() user) {
+    console.log(user);
     return this.usersService.whoIAm(user.id);
   }
 
@@ -60,14 +60,14 @@ export class UserController {
   }
 
   @Patch('/password')
-  changePassword(@Body() user: User) {
+  changePassword(@Body() user: UserChangePasswordDTO) {
     return this.usersService.changePassword(user);
   }
 
   @Put('/:id')
   updateUser(
     @Param('id') userId: string,
-    @Body() userData: Partial<UserDTO>,
+    @Body() userData: Partial<UserCreateDto>,
   ) {
     return this.usersService.updateUser(userId, userData);
   }

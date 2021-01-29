@@ -10,8 +10,9 @@ import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 
 import { UserEntity, RoleEntity, PermissionEntity } from '../entities';
-import { UserDTO } from '../dtos/user.dto';
 import { UserTokenData } from 'src/security/interfaces/user-token.interface';
+import { UserAuthDTO, UserCreateDto } from '../dtos';
+import { UserChangePasswordDTO } from '../dtos/user-change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -42,7 +43,7 @@ export class UserService {
     return user.toResponseUser();
   }
 
-  async createUser(userData: UserDTO): Promise<UserEntity> {
+  async createUser(userData: UserCreateDto): Promise<UserEntity> {
     const userFind = await this.usersRepository.findOne({
       where: { username: userData.username },
     });
@@ -63,12 +64,11 @@ export class UserService {
   }
 
   // Arreglar, no funciona la actualizacion de la relacion con roles
-  async updateUser(userId: string, userData: Partial<UserDTO>) {
+  async updateUser(userId: string, userData: Partial<UserCreateDto>) {
     await this.ensureUserExist(userId);
     const userToUpdate = await this.usersRepository.findOne({
       where: { id: userId },
     });
-    userData.roles = undefined;
     await this.usersRepository.update(
       { id: userId },
       { username: userData.username },
@@ -105,7 +105,7 @@ export class UserService {
     }
   }
 
-  async login(data: any) {
+  async login(data: UserAuthDTO) {
     const { username, password } = data;
     const user = await this.usersRepository.findOne({
       where: { username },
@@ -174,17 +174,23 @@ export class UserService {
     return this.createUser(superuser);
   }
 
-  async changePassword(user: Partial<UserDTO>) {
+  async changePassword(user: Partial<UserChangePasswordDTO>) {
     const userToChangePass = await this.usersRepository.findOne({
       where: { username: user.username },
     });
     if (!userToChangePass) {
       throw new HttpException('The user not exist', HttpStatus.BAD_REQUEST);
     }
-    user.password = await this.encryptPassword(user.password);
+    if(!bcrypt.compareSync(user.oldPassword, userToChangePass.password)) {
+      throw new HttpException('The password is wrong', HttpStatus.BAD_REQUEST);
+    }
+    if(user.newPassword !== user.passwordConfirm) {
+      throw new HttpException('The password is not the same', HttpStatus.BAD_REQUEST);
+    }
+    user.newPassword = await this.encryptPassword(user.newPassword);
     await this.usersRepository.update(
       { username: user.username },
-      { password: user.password },
+      { password: user.newPassword },
     );
     return userToChangePass.toResponseUser();
   }

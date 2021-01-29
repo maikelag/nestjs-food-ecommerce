@@ -1,9 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { RoleEntity, PermissionEntity } from '../entities';
-import { RoleDTO } from '../dtos/role.dto';
+import { RoleCreateDto, RoleUpdateDto } from '../dtos';
 
 @Injectable()
 export class RoleService {
@@ -29,7 +28,7 @@ export class RoleService {
     return await this.roleRepository.find({ relations: ['permissions'] });
   }
 
-  async createRole(roleData: RoleDTO): Promise<RoleEntity> {
+  async createRole(roleData: RoleCreateDto): Promise<RoleEntity> {
     const roleFind = await this.roleRepository.findOne({
       where: { role: roleData.role },
     });
@@ -51,6 +50,28 @@ export class RoleService {
       where: { id: roleId },
       relations: ['permissions'],
     });
+  }
+
+  async changeNameRole(roleId: string, name: string) {
+    const role = await this.findOneRole(roleId);
+    role.role = name;
+    await this.roleRepository.save(role);
+    return role;
+  }
+
+  async changePermissionsRole(roleId: string, permissions: Array<PermissionEntity>) {
+    const role = await this.findOneRole(roleId);
+    console.log(roleId);
+    console.log(permissions);
+    role.permissions = permissions;
+    await this.roleRepository.save(role);
+    return role;
+  }
+
+  async updateRole(roleId: string, roleData: RoleUpdateDto) {
+    const role = await this.findOneRole(roleId)
+    await this.roleRepository.update(roleId, roleData);
+    return role;
   }
 
   async createSuperuserRole() {

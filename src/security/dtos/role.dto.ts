@@ -7,13 +7,3 @@ export class RoleRO {
   role: string;
   users: User[];
 }
-
-// tslint:disable-next-line:max-classes-per-file
-export class RoleDTO {
-  @IsNotEmpty()
-  @IsString()
-  role: string;
-
-  @IsArray()
-  permissions: Permission[];
-}
