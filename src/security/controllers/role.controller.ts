@@ -34,13 +34,13 @@ export class RoleController {
   }
 
   @Delete('/:id')
-  removeRole(@Param('id', new ParseIntPipe) id: number) {
+  removeRole(@Param('id') id: string) {
     return this.roleService.removeRole(id);
   }
 
   @PermissionsDecorator(PermissionList.READ_ROLES)
   @Get('/:id')
-  findOneRole(@Param('id', new ParseIntPipe) roleId: number) {
+  findOneRole(@Param('id') roleId: string) {
     return this.roleService.findOneRole(roleId);
   }
 }

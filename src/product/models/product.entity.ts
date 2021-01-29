@@ -7,7 +7,7 @@ import { CategoryEntity } from './category.entity';
 
 @Entity('Products')
 export class ProductEntity {
-  @PrimaryGeneratedColumn() id: number;
+  @PrimaryGeneratedColumn('uuid') id: string;
 
   @Column({ length: 160 })
   name: string;

@@ -24,7 +24,7 @@ export class UserService {
     private readonly permissionRepository: Repository<PermissionEntity>,
   ) {}
 
-  private async ensureUserExist(userId: number) {
+  private async ensureUserExist(userId: string) {
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new HttpException('User not exist', HttpStatus.BAD_REQUEST);
@@ -36,7 +36,7 @@ export class UserService {
     return users.map(u => u.toResponseUser());
   }
 
-  async findOneUser(userId: number): Promise<UserEntity> {
+  async findOneUser(userId: string): Promise<UserEntity> {
     await this.ensureUserExist(userId);
     const user = await this.usersRepository.findOne({ where: { id: userId } })
     return user.toResponseUser();
@@ -55,7 +55,7 @@ export class UserService {
     await this.usersRepository.save(user);
     return user.toResponseUser();  }
 
-  async removeUser(id: number) {
+  async removeUser(id: string) {
     await this.ensureUserExist(id);
     const userToDelete = await this.usersRepository.findOne({ where: { id } });
     await this.usersRepository.remove(userToDelete);
@@ -63,7 +63,7 @@ export class UserService {
   }
 
   // Arreglar, no funciona la actualizacion de la relacion con roles
-  async updateUser(userId: number, userData: Partial<UserDTO>) {
+  async updateUser(userId: string, userData: Partial<UserDTO>) {
     await this.ensureUserExist(userId);
     const userToUpdate = await this.usersRepository.findOne({
       where: { id: userId },
@@ -122,7 +122,7 @@ export class UserService {
     return { ...user, token };
   }
 
-  async whoIAm(userId: number) {
+  async whoIAm(userId: string) {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
       relations: ['roles'],
@@ -190,7 +190,7 @@ export class UserService {
   }
 
   async updateRolesOfUser(
-    userId: number,
+    userId: string,
     roles: RoleEntity[],
   ): Promise<UserEntity> {
     const userToUpdate = await this.usersRepository.findOne({

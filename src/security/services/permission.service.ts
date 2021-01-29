@@ -19,7 +19,7 @@ export class PermissionService {
     return this.permissionRepository.save(permission);
   }
 
-  async removePermission(id: number) {
+  async removePermission(id: string) {
     const permissionToDelete = await this.permissionRepository.findOne({
       where: { id },
     });

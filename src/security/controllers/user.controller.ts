@@ -44,12 +44,12 @@ export class UserController {
   }
 
   @Get('/:id')
-  findOneUser(@Param('id', new ParseIntPipe()) id: number) {
+  findOneUser(@Param('id') id: string) {
     return this.usersService.findOneUser(id);
   }
 
   @Delete('/:id')
-  removeUser(@Param('id', new ParseIntPipe()) id: number) {
+  removeUser(@Param('id') id: string) {
     return this.usersService.removeUser(id);
   }
 
@@ -66,7 +66,7 @@ export class UserController {
 
   @Put('/:id')
   updateUser(
-    @Param('id', new ParseIntPipe()) userId: number,
+    @Param('id') userId: string,
     @Body() userData: Partial<UserDTO>,
   ) {
     return this.usersService.updateUser(userId, userData);
@@ -74,7 +74,7 @@ export class UserController {
 
   @Put('/:id/roles')
   updateRoleOfUser(
-    @Param('id', new ParseIntPipe()) userId: number,
+    @Param('id') userId: string,
     @Body() roles: RoleEntity[],
   ) {
     return this.usersService.updateRolesOfUser(userId, roles);

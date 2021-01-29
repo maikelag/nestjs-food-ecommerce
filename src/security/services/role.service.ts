@@ -14,7 +14,7 @@ export class RoleService {
     private readonly permissionRepository: Repository<PermissionEntity>,
   ) {}
 
-  private async ensureRoleExist(roleId: number): Promise<RoleEntity> {
+  private async ensureRoleExist(roleId: string): Promise<RoleEntity> {
     const role = await this.roleRepository.findOne({
       where: { id: roleId },
       relations: ['permissions'],
@@ -41,12 +41,12 @@ export class RoleService {
     return role;
   }
 
-  async removeRole(id: number) {
+  async removeRole(id: string) {
     const roleToDelete = await this.ensureRoleExist(id);
     return this.roleRepository.remove(roleToDelete);
   }
 
-  async findOneRole(roleId: number): Promise<RoleEntity> {
+  async findOneRole(roleId: string): Promise<RoleEntity> {
     return this.roleRepository.findOne({
       where: { id: roleId },
       relations: ['permissions'],

@@ -14,7 +14,7 @@ import { sign } from 'jsonwebtoken';
 
 @Entity('Users')
 export class UserEntity extends BaseEntity {
-  @PrimaryGeneratedColumn() id: number;
+  @PrimaryGeneratedColumn('uuid') id: string;
 
   @Column({ length: 160, nullable: true })
   email: string;
