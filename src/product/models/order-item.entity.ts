@@ -13,9 +13,8 @@ import { OrderEntity } from './order.entity';
     @PrimaryGeneratedColumn('uuid') 
     id: string;
   
-    @OneToMany(() => ProductEntity, product => product.orderItems)
+    @ManyToOne(() => ProductEntity, product => product.orderItems, {eager: true})
     product: ProductEntity;
-
     @Column()
     quantity: number;
 

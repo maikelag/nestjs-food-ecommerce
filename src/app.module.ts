@@ -30,7 +30,6 @@ import { ProductModule } from './product/product.module';
     }),
     SecurityModule,
     ProductModule,
-
   ],
   controllers: [AppController],
   providers: [AppService, {

@@ -13,7 +13,7 @@ import { UserEntity} from '../entities'
 import { UserService } from '../services';
 import { UserDecorator } from '../../common/decorators/user.decorator';
 import { ValidationPipe } from '../../common/validation.pipe';
-import { RoleEntity } from '../entities/role.entity';
+import { RoleEntity } from '../entities';
 import { UserAuthDTO, UserChangePasswordDTO, UserCreateDto } from '../dtos';
 
 @Controller('users')
@@ -33,7 +33,6 @@ export class UserController {
 
   @Get('/who-i-am')
   whoIAm(@UserDecorator() user) {
-    console.log(user);
     return this.usersService.whoIAm(user.id);
   }
 

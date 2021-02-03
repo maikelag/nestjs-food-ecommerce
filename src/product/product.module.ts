@@ -1,9 +1,18 @@
 import { Module } from '@nestjs/common';
-import { ProductController, CategoryController } from './controllers';
-import { ProductService, CategoryService } from './services';
+import { MulterModule } from '@nestjs/platform-express';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductController, CategoryController, OrderController } from './controllers';
+import { ProductService, CategoryService, OrderService } from './services';
+import { CategoryEntity, OrderEntity, OrderItemEntity, ProductEntity } from './models';
 
 @Module({
-  controllers: [ProductController, CategoryController],
-  providers: [ProductService, CategoryService]
+  imports: [
+    TypeOrmModule.forFeature([CategoryEntity, ProductEntity, OrderEntity, OrderItemEntity]),
+    MulterModule.register({
+      dest: './public'
+    })
+  ],
+  controllers: [ProductController, CategoryController, OrderController],
+  providers: [ProductService, CategoryService, OrderService]
 })
 export class ProductModule {}

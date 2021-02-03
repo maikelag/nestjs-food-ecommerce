@@ -61,15 +61,17 @@ export class RoleService {
 
   async changePermissionsRole(roleId: string, permissions: Array<PermissionEntity>) {
     const role = await this.findOneRole(roleId);
-    console.log(roleId);
-    console.log(permissions);
     role.permissions = permissions;
     await this.roleRepository.save(role);
     return role;
   }
 
   async updateRole(roleId: string, roleData: RoleUpdateDto) {
-    const role = await this.findOneRole(roleId)
+    const role = await this.findOneRole(roleId);
+    role.permissions = roleData.permissions;
+    await this.roleRepository.save(role);
+    delete roleData.permissions;
+
     await this.roleRepository.update(roleId, roleData);
     return role;
   }

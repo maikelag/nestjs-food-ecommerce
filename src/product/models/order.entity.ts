@@ -1,6 +1,5 @@
 import {
     Column,
-    ManyToMany,
     OneToMany,
   } from 'typeorm';
   import { Entity, PrimaryGeneratedColumn } from 'typeorm';
@@ -14,10 +13,10 @@ import { OrderItemEntity } from './order-item.entity';
     shippingAddress: string;
 
     @Column()
-    city: string
+    city: string;
     
     @Column()
-    zip: string
+    zip: string;
 
     @Column()
     status: string;

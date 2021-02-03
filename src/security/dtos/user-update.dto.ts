@@ -2,25 +2,9 @@ import { IsNotEmpty, IsArray, IsAlphanumeric, IsString, IsEmail } from 'class-va
 import { RoleEntity } from '../entities';
 
 export class UserUpdateDto {
-  @IsNotEmpty()
-  @IsAlphanumeric()
-  @IsString()
-  username?: string;
-
-  @IsNotEmpty()
-  @IsEmail()
-  email?: string;
-
-  @IsNotEmpty()
-  @IsString()
-  password?: string;
-
   @IsString()
   name?: string;
 
   @IsString()
   lastName?: string;
-
-  @IsArray()
-  roles?: RoleEntity[];
 }

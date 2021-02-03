@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, ManyToOne, OneToMany } from 'typeorm';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -19,7 +19,10 @@ export class ProductEntity {
   @Column({ length: 160, nullable: true })
   image: string;
 
-  @Column('int')
+  @Column("text", { array: true, default: "{}" })
+  images: string[];
+
+  @Column({nullable: true, type: 'int'})
   amount: number;
 
   @Column({ nullable: true, type: 'float' })
@@ -30,6 +33,12 @@ export class ProductEntity {
 
   @Column({ nullable: true, type: 'boolean' })
   isOnSale: boolean;
+
+  @Column({nullable: true, type: 'text'})
+  status: string;
+
+  @Column({nullable: true, type: 'text'})
+  serialNumber: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -42,6 +51,6 @@ export class ProductEntity {
   categories: CategoryEntity[];
 
   
-  @ManyToOne(() => OrderItemEntity, orderItems => orderItems.product)
+  @OneToMany(() => OrderItemEntity, orderItems => orderItems.product)
   orderItems: OrderItemEntity[]
 }

@@ -11,8 +11,8 @@ import * as bcrypt from 'bcryptjs';
 
 import { UserEntity, RoleEntity, PermissionEntity } from '../entities';
 import { UserTokenData } from 'src/security/interfaces/user-token.interface';
-import { UserAuthDTO, UserCreateDto } from '../dtos';
-import { UserChangePasswordDTO } from '../dtos/user-change-password.dto';
+import { UserAuthDTO, UserCreateDto, UserUpdateDto } from '../dtos';
+import { UserChangePasswordDTO } from '../dtos';
 
 @Injectable()
 export class UserService {
@@ -39,7 +39,7 @@ export class UserService {
 
   async findOneUser(userId: string): Promise<UserEntity> {
     await this.ensureUserExist(userId);
-    const user = await this.usersRepository.findOne({ where: { id: userId } })
+    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['roles'] });
     return user.toResponseUser();
   }
 
@@ -51,10 +51,10 @@ export class UserService {
       throw new HttpException('User already exist', HttpStatus.BAD_REQUEST);
     }
     userData.password = await this.encryptPassword(userData.password);
-    console.log(userData)
     const user = await this.usersRepository.create(userData);
     await this.usersRepository.save(user);
-    return user.toResponseUser();  }
+    return user.toResponseUser();
+  }
 
   async removeUser(id: string) {
     await this.ensureUserExist(id);
@@ -64,14 +64,14 @@ export class UserService {
   }
 
   // Arreglar, no funciona la actualizacion de la relacion con roles
-  async updateUser(userId: string, userData: Partial<UserCreateDto>) {
+  async updateUser(userId: string, userData: UserUpdateDto) {
     await this.ensureUserExist(userId);
     const userToUpdate = await this.usersRepository.findOne({
       where: { id: userId },
     });
     await this.usersRepository.update(
       { id: userId },
-      { username: userData.username },
+      userData,
     );
     return userToUpdate.toResponseUser();
   }
