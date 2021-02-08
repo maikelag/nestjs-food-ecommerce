@@ -6,9 +6,11 @@ import { ConfigModule } from '@nestjs/config';
 import { generalConfig } from './config';
 import { DecodeTokenMiddleware } from './common/middleware/decode-token.middleware';
 import { SecurityModule } from "./security/security.module";
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 import { LoggingInterceptor } from './common/loggin.interceptor';
 import { ProductModule } from './product/product.module';
+import { ExceptionsLoggerFilter } from './common/filters/exception-logger.filter'
+import { HttpExceptionFilter } from './common/filters/http-error.filter';
 
 @Module({
   imports: [
@@ -35,7 +37,11 @@ import { ProductModule } from './product/product.module';
   providers: [AppService, {
     provide: APP_INTERCEPTOR,
     useClass: LoggingInterceptor,
-  },],
+  }, {
+    provide: APP_FILTER,
+    useClass: HttpExceptionFilter,
+  },
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

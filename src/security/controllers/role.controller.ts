@@ -38,6 +38,7 @@ export class RoleController {
     return this.roleService.removeRole(id);
   }
 
+  @UseGuards(RolesGuard)
   @PermissionsDecorator(PermissionList.READ_ROLES)
   @Get('/:id')
   findOneRole(@Param('id') roleId: string) {

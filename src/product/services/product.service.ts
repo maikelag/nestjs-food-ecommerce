@@ -17,12 +17,45 @@ export class ProductService {
     return await this.productRepository.find({relations: ['categories']});
   }
 
+  async paginateProducts(offset = 10, limit = 1) {
+    const [items, count] = await this.productRepository.findAndCount({
+      relations: ['categories'],
+      order: {
+        createdAt: 'DESC'
+      },
+      skip: offset,
+      take: limit
+    });
+    return {
+      items,
+      count
+    }
+  }
+
   async findProductById(productId: string): Promise<ProductEntity> {
     const product = await this.productRepository.findOne({ where: { id: productId }, relations: ['categories'] });
     if (!product) {
       throw new HttpException('Product not exist', HttpStatus.BAD_REQUEST);
     }
     return product;
+  }
+
+  async findProductByCategory(categoryId: string): Promise<ProductEntity[]> {
+    const productOfCategory: Array<ProductEntity> = [];
+    const products = await this.productRepository.find({ relations: ['categories'] });
+    for (const p of products) {
+      let flag = false;
+      let i = 0;
+      while (!flag && i < p.categories.length) {
+        if (p.categories[i].id === categoryId) {
+          flag = true;
+          productOfCategory.push(p);
+        }
+        i++;
+      }
+    }
+
+    return productOfCategory;
   }
 
   async createProduct(productData: ProductCreateDto): Promise<any> {
@@ -64,7 +97,7 @@ export class ProductService {
   }
 
   private async removeImagesOfProducts(imagesName: string[]): Promise<void> {
-    for(let image of imagesName) {
+    for(const image of imagesName) {
       await removeImage(image);
       console.log('Imagen eliminada corrwectamente')
     }

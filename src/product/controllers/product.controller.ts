@@ -4,7 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  Post, Put,
+  Post, Put, Query,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -14,6 +14,7 @@ import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from '../../common/utils/file-uploading.utils';
 import { ProductService } from '../services';
 import { ProductCreateDto, ProductUpdateDto } from '../dtos';
+import { PaginationParams } from '../interfaces/pagination-param.interface';
 
 @Controller('products')
 export class ProductController {
@@ -24,9 +25,19 @@ export class ProductController {
     return this.productService.findAll()
   }
 
+  @Get('/paginate')
+  paginateProduct(@Query() { offset, limit }: PaginationParams) {
+    return this.productService.paginateProducts(offset, limit);
+  }
+
   @Get(':id')
   findProductById(@Param('id') productId: string) {
     return this.productService.findProductById(productId);
+  }
+
+  @Get('/category/:categoryid')
+  findProductByCategory(@Param('categoryid') categoryId: string) {
+    return this.productService.findProductByCategory(categoryId);
   }
 
   @Delete(':id')

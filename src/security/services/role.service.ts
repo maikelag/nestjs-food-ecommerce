@@ -76,6 +76,10 @@ export class RoleService {
     return role;
   }
 
+  async roleHasPermission(roleId: string, permissionId: string): Promise<boolean> {
+    return
+  }
+
   async createSuperuserRole() {
     const permissions = await this.permissionRepository.find();
     return await this.roleRepository.save({

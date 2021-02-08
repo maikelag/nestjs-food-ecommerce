@@ -47,3 +47,6 @@ Thumbs.db
 nest7-video-repository.code-workspace
 .env
 yarn.lock
+
+# Images
+/public

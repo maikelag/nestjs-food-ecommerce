@@ -4,7 +4,6 @@ import * as compression from 'compression';
 import * as express from 'express';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import {HttpExceptionFilter} from './common/filters/http-error.filter';
 
 import { AppModule } from './app.module';
 
@@ -17,7 +16,6 @@ async function bootstrap() {
   app.use(express.static(join(__dirname, '..', 'public')));
   app.use(compression());
   app.enableCors();
-  app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(configService.get('port'));
 }
 

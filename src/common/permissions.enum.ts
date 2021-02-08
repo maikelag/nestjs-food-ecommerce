@@ -9,4 +9,13 @@ export const PermissionList = {
   // Products Permissions
   READ_PRODUCTS: 'Leer productos',
   WRITE_PRODUCTS: 'Escribir productos',
+
+  // Categories Permission
+  READ_CATEGORIES: 'Leer categorias',
+  WRITE_CATEGORIES: 'Escribir categorias',
+
+  // Orders Permission
+  READ_ORDER: 'Obtener ordenes',
+  CREATE_ORDER: 'Crear orden',
+
 };
