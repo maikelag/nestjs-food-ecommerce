@@ -21,7 +21,6 @@ export class CategoryService {
     if (!category) {
       throw new HttpException('Category not exist', HttpStatus.BAD_REQUEST);
     }
-    console.log(category);
     return category;
   }
 

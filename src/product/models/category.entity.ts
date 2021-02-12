@@ -16,5 +16,5 @@ export class CategoryEntity {
     type => ProductEntity,
     product => product.categories,
   )
-  products: ProductEntity[];
+  products?: ProductEntity[];
 }

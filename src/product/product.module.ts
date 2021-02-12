@@ -12,7 +12,7 @@ import { CategoryEntity, OrderEntity, OrderItemEntity, ProductEntity } from './m
       dest: './public'
     })
   ],
-  controllers: [ProductController, CategoryController, OrderController],
-  providers: [ProductService, CategoryService, OrderService]
+  controllers: [ProductController, CategoryController, OrderController,],
+  providers: [ProductService, CategoryService, OrderService, ]
 })
 export class ProductModule {}
