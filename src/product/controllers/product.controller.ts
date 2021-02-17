@@ -35,8 +35,8 @@ export class ProductController {
     return this.productService.findProductById(productId);
   }
 
-  @Get('/category/:categoryid')
-  findProductByCategory(@Param('categoryid') categoryId: string) {
+  @Get('/category/:categoryId')
+  findProductByCategory(@Param('categoryId') categoryId: string) {
     return this.productService.findProductByCategory(categoryId);
   }
 
