@@ -91,7 +91,12 @@ export class ProductService {
       where: { id },
     });
     if(productToDelete.images?.length > 0) {
-      await this.removeImagesOfProducts(productToDelete.images);
+      try {
+        await this.removeImagesOfProducts(productToDelete.images);
+      } catch (error) {
+        console.log(error);
+      }
+      
     }
     return this.productRepository.remove(productToDelete);
   }
